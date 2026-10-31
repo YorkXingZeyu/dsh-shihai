@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "sourceRoot": "",
+  "sources": {
+    "dsh": {
+      "enabled": true,
+      "root": "",
+      "label": "DSH 会话"
+    },
+    "qq": {
+      "enabled": false,
+      "label": "QQ 机器人",
+      "workspaceRoots": [],
+      "groupChats": false,
+      "groupMentionOnly": true,
+      "groupAutoMemory": false,
+      "groupDefault": {
+        "allMessages": false,
+        "mentionOnly": true
+      },
+      "groupPolicies": {},
+      "memberAliases": {}
+    }
+  },
+  "privacy": {
+    "rawDir": ".private/raw",
+    "reviewDir": ".private/review",
+    "cloudSync": false
+  }
+}

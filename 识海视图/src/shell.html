@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#030810">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>识海 · Shihai</title>
+<style>/*STYLE*/</style>
+</head>
+<body>
+<canvas id="universe" aria-label="识海真实记忆星图。按时间排列；可拖动旋转、滚轮缩放、点击光点查看记忆。"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<div id="live-banner" class="live-banner" hidden><span>当前是只读快照，不会实时划过新星。</span><a href="http://127.0.0.1:4177/">打开实时模式 →</a></div>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="34" height="34"><path d="M20 2 C21.2 13.6 26.4 18.8 38 20 C26.4 21.2 21.2 26.4 20 38 C18.8 26.4 13.6 21.2 2 20 C13.6 18.8 18.8 13.6 20 2 Z"/></svg>
+    </div>
+    <div class="brand-copy">
+      <h1>识海 <span>SHIHAI</span></h1>
+      <p>真实记忆库 · 同色相近 / 越深越新</p>
+    </div>
+  </div>
+  <div class="hud">
+    <span class="live-dot" aria-hidden="true"></span>
+    <span id="status">记忆快照 · 只读</span>
+    <i aria-hidden="true"></i>
+    <span><b id="memory-count">0</b> 段记忆</span>
+    <i aria-hidden="true"></i>
+    <span id="layer-count">L1 0 · L2 0</span>
+    <span><b id="story-count">0</b> 篇故事</span>
+    <i aria-hidden="true"></i>
+    <span id="privacy-count">0 条私密</span>
+    <button id="qq-policy" type="button" title="QQ群策略">群策略</button>
+    <button id="profile-toggle" type="button" aria-pressed="false">画像</button>
+    <button id="story-toggle" type="button" aria-pressed="false">故事</button>
+    <button id="private-toggle" type="button" aria-pressed="true">隐藏私密</button>
+  </div>
+</header>
+
+<div class="range-bar" aria-label="记忆时间范围">
+  <span class="eyebrow" id="range-mode-label">MEMORY SEA</span>
+  <span id="range-start">—</span><i aria-hidden="true"></i><span id="range-end">—</span>
+  <b id="range-count">0 条</b>
+  <button id="label-toggle" class="range-button" type="button" title="切换星点标签密度">标签：精简</button>
+  <button id="interaction-toggle" class="range-button" type="button" title="交互星显示范围">交互 0 · 7天</button>
+  <span id="layout-status" class="layout-status">布局</span>
+  <button id="layout-rebuild" class="range-button" type="button" title="用当前 BGE 向量全量重排">重排</button>
+</div>
+
+<aside class="orientation" aria-label="记忆时间线">
+  <span class="eyebrow">MEMORY LIBRARY / REAL</span>
+  <div class="orbital-line" aria-hidden="true"></div>
+  <p id="orientation-text">这些不是分类。<br>同色 = 相近项目；越深越新。</p>
+  <div class="time-legend" aria-hidden="true"><span>淡 · 较旧</span><i></i><span>深 · 较新</span></div>
+  <div class="visual-legend"><span>金点 = 故事</span><span>金虚线 = 候选</span><span>大小 = 强度</span><span>记忆海 = 星团</span></div>
+  <div id="cluster-legend" class="cluster-legend" hidden></div>
+  <div class="side-block timeline-block" hidden>
+    <div class="side-head"><span>时间线</span></div>
+    <div id="timeline"></div>
+  </div>
+</aside>
+
+<div class="camera" role="group" aria-label="视角控制">
+  <button id="zoom-in" type="button" aria-label="放大" title="放大">＋</button>
+  <button id="zoom-out" type="button" aria-label="缩小" title="缩小">−</button>
+  <button id="home" type="button" aria-label="回到全景" title="回到全景">⌖</button>
+  <button id="pause" type="button" aria-label="暂停动画" title="暂停或继续动画（空格）">Ⅱ</button>
+</div>
+
+<section id="inspector" class="panel" hidden aria-label="记忆详情">
+  <button class="close" id="close-inspector" type="button" aria-label="关闭记忆详情">×</button>
+  <div id="detail"></div>
+</section>
+
+<section id="results" class="panel" hidden aria-label="记忆检索结果">
+  <button class="close" id="close-results" type="button" aria-label="关闭检索结果">×</button>
+  <span class="eyebrow">RECALL / 只读检索</span>
+  <h2>被找回的记忆</h2>
+  <p id="result-summary"></p>
+  <div id="result-list"></div>
+</section>
+
+<section id="profile-panel" class="panel profile-panel" hidden aria-label="识海画像">
+  <button class="close" id="close-profile" type="button" aria-label="关闭画像">×</button>
+  <span class="eyebrow">L3 / 推导画像 · 不是事实原文</span>
+  <h2>识海画像</h2>
+  <p id="profile-note"></p>
+  <div id="profile-detail"></div>
+</section>
+
+<section id="story-panel" class="panel story-panel" hidden aria-label="共同经历故事">
+  <button class="close" id="close-story" type="button" aria-label="关闭故事">×</button>
+  <span class="eyebrow">STORYBOOK / 养成叙事 · 不是逐字事实</span>
+  <h2>共同经历</h2>
+  <p id="story-note">按时间读的共同经历，不是索引。故事是养成注记，来源仍以原记忆的 seq/quote 为准。</p>
+  <div id="story-list"></div>
+</section>
+
+<section class="context-strip" aria-live="polite">
+  <span id="chapter-label" class="eyebrow">真实记忆 / READ ONLY</span>
+  <h2 id="narration-title">记忆不会说谎。</h2>
+  <p id="narration-text">同色代表相近项目，颜色越深越新、越淡越旧。点开光点，查看原始记录与来源。</p>
+</section>
+
+<footer class="dock">
+  <form id="recall-form" role="search">
+    <span class="search-icon" aria-hidden="true">⌕</span>
+    <input id="query" maxlength="100" placeholder="找一个人、一件事、一个项目……" aria-label="检索记忆" autocomplete="off">
+    <button type="submit">找回记忆</button>
+  </form>
+  <div class="dock-actions">
+    <span class="readonly-note" id="live-note">只读 · 快照</span>
+  </div>
+</footer>
+
+<script>/*DATA*/</script>
+<script>/*APP*/</script>
+</body>
+</html>

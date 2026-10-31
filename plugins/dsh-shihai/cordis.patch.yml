@@ -1,0 +1,6 @@
+- insert:
+    - id: dsh-shihai
+      name: dsh-shihai
+      config:
+        viewerUrl: 'http://127.0.0.1:4177/'
+        memoryRoot: ''

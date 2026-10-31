@@ -1,0 +1,21 @@
+.private/
+config/sources.json
+node_modules/
+*.zip
+*.tmp
+.DS_Store
+
+# Runtime memory / generated data — keep the repo code-only.
+20_共同经历/**/*.md
+30_片段/**/*.md
+30_约定/**/*.md
+35_原子/**/*.md
+40_项目/**/*.md
+50_故事/**/*.md
+50_日常/**/*.md
+60_主题/**/*.md
+80_原始会话/**/*.md
+90_元数据/*
+!90_元数据/.gitkeep
+识海视图/index.html
+识海视图/数据快照.json

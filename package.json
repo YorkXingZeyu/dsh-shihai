@@ -1,0 +1,16 @@
+{
+  "name": "shihai-open",
+  "version": "0.1.0",
+  "private": true,
+  "description": "识海 / Shihai · 本地优先的 DSH 长期记忆库与可视化插件",
+  "type": "module",
+  "scripts": {
+    "setup": "node setup.mjs",
+    "build": "node 识海视图/build.mjs",
+    "viewer": "node tools/start-viewer.mjs",
+    "install-dsh": "node install-dsh.mjs",
+    "check:privacy": "node scripts/check-privacy.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
