@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "setup": "node setup.mjs",
+    "index": "node tools/build-index.mjs",
     "build": "node 识海视图/build.mjs",
     "viewer": "node tools/start-viewer.mjs",
     "install-dsh": "node install-dsh.mjs",
