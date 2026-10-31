@@ -449,10 +449,6 @@ SHIHAI_VIEW_PORT=4178 node 识海视图/server.mjs
 
 直接把仓库根目录作为 Vault 打开。`.private` 以点开头，Obsidian 默认不显示。
 
-### 它会把我的记忆上传到哪里吗？
-
-不会。查看器默认只读本地文件；仓库没有云端记忆服务。公开分享前请自行脱敏。
-
 ---
 
 ## License
