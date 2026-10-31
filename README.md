@@ -88,20 +88,86 @@ node tools/start-viewer.mjs
 
 ## 在 DSH 对话框里安装
 
-可以把下面这段直接发给 DSH。它需要本地终端/文件权限，并且应该先问你要把记忆库放在哪里：
+### 先说结论：只发一句“帮我配置这个链接”不保证成功
+
+`@https://github.com/YorkXingZeyu/dsh-shihai` 只是把这个仓库作为上下文交给 DSH，**不是 DSH 的官方一键安装命令**。
+
+能不能真正装好，取决于下面这些条件是否满足：
+
+| 条件 | 不满足时会怎样 |
+|---|---|
+| DSH 有终端/文件工具权限 | 智能体只能给你步骤，不能 clone 或写 profile |
+| 本机能访问 GitHub | clone 失败 |
+| 本机有 `git` | clone 失败 |
+| 本机有 Node.js 20+ | `setup.mjs` / 查看器构建失败 |
+| 知道 DSH profile 路径 | `install-dsh.mjs` 找不到 `~/.dsh/profiles/desktop` |
+| 允许修改 profile 的 `package.json` / `node_modules` | 插件不会出现在 DSH |
+| 安装后重启 DSH | 输入区不会出现「识海」按钮 |
+
+所以：**仓库本身可以安装，但“只发一句话”不是可靠安装方式。** 推荐把下面这段完整提示词交给 DSH。
+
+### 推荐给 DSH 的完整提示词
 
 ```text
 @https://github.com/YorkXingZeyu/dsh-shihai
-请只安装这个开源插件：把它 clone 到我的本地目录，运行 setup.mjs 和 install-dsh.mjs。
-不要导入、读取、上传或合并任何已有记忆；不要提交 .private。
-先问我准备把记忆库放在哪里，再开始。
+请按这个仓库的 README 安装识海插件，不要凭猜测执行。
+
+要求：
+1. 先检查本机是否安装 git、Node.js 20+，并确认 DSH profile 路径；
+2. 先问我准备把记忆库放在哪个目录，不要默认放进入口目录；
+3. 在目标目录 clone 仓库，运行 node setup.mjs，再运行 node install-dsh.mjs；
+4. 只安装代码和空模板；不要读取、导入、上传、合并或提交任何已有记忆；
+5. 不要提交 .private/、config/sources.json、90_元数据/ 的私人数据；
+6. 如果 profile 不是默认路径，用 DSH_PROFILE_DIR 指定；
+7. 安装完成后告诉我：装了哪个目录、改了哪个 profile、是否需要重启 DSH；
+8. 如果需要重启 DSH，先停下来等我确认，不要直接重启。
 ```
 
-说明：
+这段提示词比“帮我配置这个链接”多做了三件事：**先检查环境、先确认路径、明确不碰记忆**。
 
-- `@GitHub 地址` 只是把仓库交给 DSH 作为上下文；**不是绕过权限的自动执行**。
-- DSH 需要你确认安装位置和终端命令。
-- 安装完成后得到的是**空识海**，不是别人的记忆。
+### 安装后怎么验证
+
+```bash
+cd <你选择的目录>
+node scripts/check-privacy.mjs
+node 识海视图/build.mjs
+```
+
+预期：
+
+- 隐私检查通过；
+- 空库显示 0 条记忆；
+- 重启 DSH 后，输入区右侧出现「识海」按钮；
+- 点击按钮能打开 `http://127.0.0.1:4177/`。
+
+### 常见失败
+
+| 现象 | 先检查 |
+|---|---|
+| DSH 里没有「识海」按钮 | 是否运行了 `install-dsh.mjs`；profile 是否有 `dsh-shihai` bundle；是否重启了 DSH |
+| `setup.mjs` 报 Node 版本/语法错误 | `node -v` 是否 ≥ 20 |
+| `install-dsh.mjs` 找不到 profile | 用 `DSH_PROFILE_DIR` 指向实际 profile |
+| 按钮有，但 iframe 打不开 | 4177 是否被占用；查看器是否已构建 |
+| 页面 0 条记忆 | 仍为空库；先按下一节写入第一条记忆 |
+
+### 手动安装（不经过 DSH 智能体）
+
+```bash
+git clone https://github.com/YorkXingZeyu/dsh-shihai.git
+cd dsh-shihai
+node setup.mjs
+node install-dsh.mjs
+# 重启 DSH
+```
+
+如果只想看查看器，不装 DSH 入口：
+
+```bash
+node tools/start-viewer.mjs
+# http://127.0.0.1:4177/
+```
+
+> 安装完成得到的是**空识海**，不是别人的记忆。
 
 ---
 
